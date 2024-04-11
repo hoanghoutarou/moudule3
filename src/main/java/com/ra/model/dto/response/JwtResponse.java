@@ -12,11 +12,10 @@ import java.util.Set;
 @Data
 @Builder
 public class JwtResponse {
-    private Long id;
-    private String username;
+    private String accessToken;
+    private final String type = "Bearer";
     private String fullName;
-    private String email;
-    private String token;
-    private final String type = "Bearer Token";
+    private String username;
+    private Boolean status;
     private Set<String> roles;
 }

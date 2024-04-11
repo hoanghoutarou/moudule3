@@ -1,6 +1,6 @@
 package com.ra.security.user_principal;
 
-import com.ra.model.entity.User;
+import com.ra.model.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +15,11 @@ import java.util.Collection;
 @Data
 @Builder
 public class UserPrincipal implements UserDetails {
-    private User user;
-    private Collection<? extends  GrantedAuthority> authorities;
+
+    private Users users;
+
+    private Collection<? extends GrantedAuthority> authorities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
@@ -24,12 +27,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return this.users.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.user.getUserName();
+        return this.users.getUsername();
     }
 
     @Override
@@ -49,6 +52,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.user.getStatus();
+        return true;
     }
 }

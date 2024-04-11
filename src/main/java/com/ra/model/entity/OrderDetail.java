@@ -1,30 +1,37 @@
 package com.ra.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity
 @Builder
+@Table(name = "order_detail")
+@IdClass(OrderDetailId.class)
 public class OrderDetail {
     @Id
     @ManyToOne
-    @JoinColumn(name = "productId")
-    private Product product;
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    private Orders orders;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "orderId")
-    private Orders orders;
-    private String productName;
-    private Double unitPrice;
-    private Integer orderQuantity;
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    private Product product;
+
+    @Column(length = 100)
+    private String name;
+
+    @Column(name = "unit_price")
+    private Double price;
+
+    @Column(name = "order_quantity")
+    @Min(1)
+    private int quantity;
 }

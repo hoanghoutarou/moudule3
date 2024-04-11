@@ -1,41 +1,66 @@
 package com.ra.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.List;
 
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity
 @Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
-    @Column(unique = true)
+
+    @Column(length = 100, unique = true)
     private String sku;
-    @Column(unique = true,nullable = false)
-    private String productName;
+
+    @Column(name = "product_name", length = 100, unique = true)
+    private String name;
+
     private String description;
-    private Double unitPrice;
-    private Integer stockQuantity;
+
+    @Column(name = "unit_price")
+    private Double price;
+
+    @Column(name = "stock_quantity")
+    @Min(0)
+    private int quantity;
+
     private String image;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(name = "created_at")
+    @JsonFormat(pattern = "dd/mm/yyyy")
+    private Date created;
+
+    @Column(name = "updated_at")
+    @JsonFormat(pattern = "dd/mm/yyyy")
+    private Date updated;
+
     @ManyToOne
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
+
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    private List<WishList> wishLists;
+    List<OrderDetail> orderDetails;
+
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    private List<OrderDetail> orderDetails;
+    List<ShopingCart> shopingCarts;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    List<WishList> wishLists;
 }
